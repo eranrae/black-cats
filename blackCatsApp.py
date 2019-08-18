@@ -8,10 +8,8 @@ Created on Sat Aug 17 22:05:39 2019
 import praw
 import pandas as pd
 import redcreds as creds
-from nltk import word_tokenize, pos_tag, pos_tag_sents
-import numpy as np
+from nltk import word_tokenize, pos_tag_sents
 import collections
-
 
 r = praw.Reddit(username = creds.username,            
 password = creds.password,            
@@ -36,6 +34,7 @@ for title in taggedTitles:
         if pos=='NNP':
             properNouns.append(word)
             
-naameCount = collections.Counter(properNouns)
+nameCount = collections.Counter(properNouns)
+print(nameCount.most_common(40))
 
 
