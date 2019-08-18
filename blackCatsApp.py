@@ -8,6 +8,10 @@ Created on Sat Aug 17 22:05:39 2019
 import praw
 import pandas as pd
 import redcreds as creds
+from nltk import word_tokenize, pos_tag, pos_tag_sents
+import numpy as np
+import collections
+
 
 r = praw.Reddit(username = creds.username,            
 password = creds.password,            
@@ -15,12 +19,23 @@ client_id = creds.client_id,
 client_secret = creds.client_secret,            
 user_agent = creds.user_agent) 
 
-submissions = r.subreddit('blackcats').top("day", limit=100)
+submissions = r.subreddit('blackcats').top("all", limit=1000)
 
-subs=[]
+subs = []
 for sub in submissions:
         subs.append({'Titles': sub.title})
     
-pd.DataFrame(subs)
+subs=pd.DataFrame(subs)
+titles = subs['Titles'].tolist()
+taggedTitles = pos_tag_sents(map(word_tokenize, titles))
+
+properNouns = []
+
+for title in taggedTitles:
+    for word,pos in title:
+        if pos=='NNP':
+            properNouns.append(word)
+            
+naameCount = collections.Counter(properNouns)
 
 
